@@ -1,0 +1,113 @@
+Author : Tadiwanashe Antony Tuwacha
+Program : Timed Traffic lights
+Date : 11/25/2025
+"""
+from tkinter import *
+import random
+
+# Create the main window
+root = Tk()
+root.resizable(False, False)
+
+
+# Create a Canvas widget with a black background
+C = Canvas(root, bg="black", height=400, width=700)
+
+# Grass areas (creating green rectangles for the grass)
+grass_1 = C.create_rectangle(0, 250, 250, 400, fill="brown", outline="green")  # Left side grass
+grass_2 = C.create_rectangle(450, 250, 700, 400, fill="brown", outline="green")  # Right side grass
+grass_3 = C.create_rectangle(0, 0, 750, 100, fill="green", outline="green")
+
+# Road lines
+line_1 = C.create_line(0, 175, 250, 175, fill="white")
+line_2 = C.create_line(450, 175, 720, 175, fill="white")
+line_3 = C.create_line(350, 250, 350, 475, fill="white")
+line_4 = C.create_line(0, 110, 750, 110, fill="yellow")
+line_5 = C.create_line(0, 240, 260, 240, fill="yellow")
+line_6 = C.create_line(440, 240, 750, 240, fill="yellow")
+line_7 = C.create_line(260, 240, 260, 450, fill="yellow")
+line_8 = C.create_line(440, 240, 440, 450, fill="yellow")
+
+# Crosswalk
+rd_1 = C.create_rectangle(250, 120, 220, 140, fill="white", outline="white")
+rd_2 = C.create_rectangle(250, 150, 220, 170, fill="white", outline="white")
+rd_3 = C.create_rectangle(250, 180, 220, 200, fill="white", outline="white")
+rd_4 = C.create_rectangle(250, 210, 220, 230, fill="white", outline="white")
+
+rd_5 = C.create_rectangle(480, 120, 450, 140, fill="white", outline="white")
+rd_6 = C.create_rectangle(480, 150, 450, 170, fill="white", outline="white")
+rd_7 = C.create_rectangle(480, 180, 450, 200, fill="white", outline="white")
+rd_8 = C.create_rectangle(480, 210, 450, 230, fill="white", outline="white")
+
+# Create traffic light placeholders (red, yellow, green for both sides)
+frame = C.create_rectangle(265, 80, 270, 150, fill="gray")
+frame_2 = C.create_rectangle(495, 180, 490, 260, fill="gray")
+light_1 = C.create_oval(270, 100, 290, 120, fill="red")  # Left side red light
+light_2 = C.create_oval(270, 120, 290, 140, fill="yellow")  # Left side yellow light
+light_3 = C.create_oval(270, 140, 290, 160, fill="green")  # Left side green light
+
+light_4 = C.create_oval(470, 180, 490, 200, fill="green")  # Right side green light
+light_5 = C.create_oval(470, 200, 490, 220, fill="yellow")  # Right side yellow light
+light_6 = C.create_oval(470, 220, 490, 240, fill="red")  # Right side red light
+
+# Display a popup message (Go!!) when both lights are green
+def show_go_popup():
+    C.create_text(350, 50, text="GO!!", fill="white", font=("Helvetica", 30, "bold"), tag="popup")
+
+def show_stop_popup():
+    C.create_text(350, 50, text="STOP!!", fill="RED", font=("Helvetica", 30, "bold"), tag="popup")
+
+def show_null_popup():
+    # Clear the previous popup text
+    C.delete("popup")
+
+def switch_traffic_lights():
+    # Change left light to green and right light to red
+    C.itemconfig(light_1, fill="red")  # Left side red
+    C.itemconfig(light_2, fill="yellow")  # Left side yellow
+    C.itemconfig(light_3, fill="green")  # Left side green
+
+    C.itemconfig(light_4, fill="green")  # Right side green
+    C.itemconfig(light_5, fill="yellow")  # Right side yellow
+    C.itemconfig(light_6, fill="red")  # Right side red
+
+    show_null_popup()  # Clear any previous popup message
+
+    # Check if both lights are green
+    if C.itemcget(light_3, "fill") == "green" and C.itemcget(light_4, "fill") == "green":
+        show_go_popup()  # Display the "GO!!" popup text
+    else:
+        show_stop_popup()  # Display the "STOP!!" popup text
+
+    # Switch traffic lights after 12 seconds
+    root.after(10000, change_traffic_lights)
+
+def change_traffic_lights():
+    # Change left light to red and right light to green
+    C.itemconfig(light_1, fill="green")  # Left side green
+    C.itemconfig(light_2, fill="yellow")  # Left side yellow
+    C.itemconfig(light_3, fill="red")  # Left side red
+
+    C.itemconfig(light_4, fill="red")  # Right side red
+    C.itemconfig(light_5, fill="yellow")  # Right side yellow
+    C.itemconfig(light_6, fill="green")  # Right side green
+
+    show_null_popup()  # Clear any previous popup message
+
+    # Check if both lights are green
+    if C.itemcget(light_3, "fill") == "green" and C.itemcget(light_4, "fill") == "green":
+        show_go_popup()  # Display the "GO!!" popup text
+    else:
+        show_stop_popup()  # Display the "STOP!!" popup text
+
+    # Switch traffic lights again after 10 seconds
+    root.after(10000, switch_traffic_lights)
+
+# Start the traffic light change
+change_traffic_lights()
+
+# Pack the canvas to display it
+C.pack()
+
+# Run the Tkinter main loop
+root.mainloop()
